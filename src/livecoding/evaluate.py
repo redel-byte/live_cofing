@@ -9,9 +9,7 @@ from config import ACCURACY_PLOT_PATH, CONFUSION_MATRIX_PATH
 
 def plot_accuracy_vs_k(results_df):
     plt.figure(figsize=(8, 5))
-
     plt.plot(results_df["k"], results_df["mean_accuracy"], marker="o")
-
     plt.xlabel("Number of Neighbors (K)")
     plt.ylabel("Mean CV Accuracy")
     plt.title("Accuracy vs K")
@@ -24,11 +22,8 @@ def plot_accuracy_vs_k(results_df):
 
 def evaluate_model(model, X_test, y_test):
     y_pred = model.predict(X_test)
-
     accuracy = accuracy_score(y_test, y_pred)
-
     print(f"Test Accuracy: {accuracy:.4f}")
-
     print("\nClassification Report:")
     print(classification_report(y_test, y_pred, zero_division=0))
 
