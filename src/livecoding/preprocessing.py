@@ -12,11 +12,12 @@ def create_pipeline(k=5):
             ),
             (
                 "knn",
-                KNeighborsClassifier(n_neighbors=k),
+                KNeighborsClassifier(
+                    n_neighbors=k,
+                ),
             ),
         ]
     )
-
     return pipeline
 
 

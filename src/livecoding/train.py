@@ -1,16 +1,43 @@
-from sklearn.metrics import (
-    ConfusionMatrixDisplay,
-    accuracy_score,
-    classification_report,
-    confusion_matrix,
-)
-from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from livecoding.extract import extract
 import pandas as pd
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+from preprocessing import create_pipeline
+from config import K_VALUES, CV_FOLDS, RANDOM_STATE
 
 
-df = extract()
-print(df.head())
+def find_best_k(X_train, y_train):
+    results = []
+    cv = StratifiedKFold(
+        n_splits=CV_FOLDS,
+        shuffle=True,
+        random_state=RANDOM_STATE,
+    )
+
+    for k in K_VALUES:
+        pipeline = create_pipeline(k=k)
+        scores = cross_val_score(
+            pipeline,
+            X_train,
+            y_train,
+            cv=cv,
+            scoring="accuracy",
+            error_score="raise",
+        )
+
+        results.append(
+            {"k": k, "mean_accuracy": scores.mean(), "std_accuracy": scores.std()}
+        )
+
+    results_df = pd.DataFrame(results)
+    best_row = results_df.sort_values(
+        ["mean_accuracy", "k"], ascending=[False, True]
+    ).iloc[0]
+    best_k = int(best_row["k"])
+
+    return best_k, results_df
+
+
+def train_model(X_train, y_train, best_k):
+    pipeline = create_pipeline(k=best_k)
+    pipeline.fit(X_train, y_train)
+
+    return pipeline
