@@ -1,23 +1,26 @@
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
-from config import RANDOM_STATE, TEST_SIZE
+from .config import RANDOM_STATE, TEST_SIZE
+import pandas as pd
 
 
-def load_dataset():
+def load_dataset() -> pd.DataFrame:
     iris = load_iris(as_frame=True)
     df = iris.frame.copy()
-    # print(set(df.columns) - set(iris.feature_names))
-
     species_mapping = dict(enumerate(iris.target_names))
     df["target"] = df["target"].map(species_mapping)
     X = df[iris.feature_names]
-    y = df["species"]
+    y = df["target"]
     return X, y
 
 
 def split_dataset(X, y):
     return train_test_split(
-        X, y, test_size=TEST_SIZE, stratify=y, random_state=RANDOM_STATE
+        X,
+        y,
+        random_state=RANDOM_STATE,
+        test_size=TEST_SIZE,
+        stratify=y,
     )
 
 

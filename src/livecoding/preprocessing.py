@@ -4,7 +4,7 @@ from sklearn.neighbors import KNeighborsClassifier
 
 
 def create_pipeline(k=5):
-    pipeline = Pipeline(
+    return Pipeline(
         [
             (
                 "scaler",
@@ -18,8 +18,3 @@ def create_pipeline(k=5):
             ),
         ]
     )
-    return pipeline
-
-
-if __name__ == "__main__":
-    create_pipeline()

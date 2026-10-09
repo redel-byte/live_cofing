@@ -4,7 +4,10 @@ from sklearn.metrics import (
     classification_report,
     ConfusionMatrixDisplay,
 )
-from config import ACCURACY_PLOT_PATH, CONFUSION_MATRIX_PATH
+from .config import (
+    ACCURACY_PLOT_PATH,
+    CONFUSION_MATRIX_PATH,
+)
 
 
 def plot_accuracy_vs_k(results_df):
